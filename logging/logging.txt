@@ -1,0 +1,15 @@
+Linux:
+      - script
+         + start: script <date>-<start time>-<name>.log
+         + end: typescript
+      - Use tool output function or custom tool:
+         + custom.py <do_something> | tee -a custom_output.txt 
+      - tmux(Recommend)
+         + start: ./stmux.sh
+         + end: ./etmux.sh
+Windows:
+      - Start-Transcript
+         + start: Start-Transcript -Path "C:\Pentesting\<date>-<start time>-<name>.log"
+         + end: Stop-Transcript
+      - Use tool output function or custom tool:
+         + Powershell: custom.py <do_something> | Out-File -Append custom_output.txt
