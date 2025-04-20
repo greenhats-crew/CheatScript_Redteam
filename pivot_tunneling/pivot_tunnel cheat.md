@@ -67,7 +67,8 @@ socks5 127.00.1 <attacker_portproxy>
 # Using proxy by: proxychains <command> [<target_ip>]
 ```
 ##### **Windows**
-- Using Proxifier![[Pasted image 20250420221113.png]]
+- Using Proxifier![image](https://github.com/user-attachments/assets/37753dc1-9179-433c-9bb0-9aa8e1c60b0d)
+
 ##### **Alternative method:**
 - **Sshuttle:** python tool, pivot over SSH.
 	- `sshuttle -r <username>:<pivot_externalip> <target_iprange>/<subnet> -v`
