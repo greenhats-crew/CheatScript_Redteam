@@ -37,7 +37,8 @@
 | filtered | Unknown or Firewall reject port | don't receive response (firewall drop packet) | RCVD: unreachable<br>(type=3/code=3) |
 
 #### Performance
-- Template: `-T <0-5>`![[Pasted image 20250407161044.png]]
+- Template: `-T <0-5>`![image](https://github.com/user-attachments/assets/13a7226e-2425-415b-8ae3-b27f64b4e2ec)
+
 #### NSE
 - Category stores many script.
 - Use `--script <category>/script.nse`
@@ -75,3 +76,4 @@
 
 #### Evasion
 - `sudo nmap <target_ip> -p <number> -sS -Pn -n --disable-arp-ping --packet-trace --source-port 53`
+
