@@ -7,7 +7,6 @@
 ## File and Path Management
 
 ### File Types (`ls -ld`)
-![[Pasted image 20250802153416.png]]
 - `-`: Regular file
 - `d`: Directory (a special type of file)
 - `l`: Symbolic link (points to another file/directory)
@@ -17,7 +16,7 @@
 - `s`: Unix socket (local network connection as a file)
 
 ### Symbolic and Hard Links
-![[Pasted image 20250802153557.png]]
+
 - **Symbolic Link**: A shortcut to another file (`ln -s <source> <link>`)
 - **Hard Link**: Points directly to file content (`ln <source> <link>`)
     - Deleting either file doesn’t affect the other; changes sync across links
@@ -120,7 +119,7 @@
     - `w`: Write (modify/create/delete for directories)
     - `x`: Execute (run program or enter directory)
     - Change Owner: `chown <user> <file>`
-    - Change Group: `chgrp <group> <file>`![[Pasted image 20250810142141.png]]![[Pasted image 20250810142217.png]]
+    - Change Group: `chgrp <group> <file>`
     - Change Permissions: `chmod <who><+/-=><what> <file>`
         - `who`: `u` (user), `g` (group), `o` (other), `a` (all)
         - `what`: `r`, `w`, `x`
