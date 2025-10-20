@@ -5,8 +5,9 @@
 - Reference: [Bash Cyberciti Guide](https://bash.cyberciti.biz/guide/Main_Page)
 
 ## File and Path Management
-
+<img width="1550" height="650" alt="image" src="https://github.com/user-attachments/assets/c53e2419-3ab0-40a0-bc22-1eb28a9a7482" />
 ### File Types (`ls -ld`)
+<img width="1172" height="374" alt="image" src="https://github.com/user-attachments/assets/34c5d76c-adc5-4d40-a8d1-a1cd8d42f703" />
 - `-`: Regular file
 - `d`: Directory (a special type of file)
 - `l`: Symbolic link (points to another file/directory)
@@ -16,7 +17,7 @@
 - `s`: Unix socket (local network connection as a file)
 
 ### Symbolic and Hard Links
-
+<img width="1287" height="640" alt="image" src="https://github.com/user-attachments/assets/64e3d141-7a38-4aab-92e0-946cacefafc4" />
 - **Symbolic Link**: A shortcut to another file (`ln -s <source> <link>`)
 - **Hard Link**: Points directly to file content (`ln <source> <link>`)
     - Deleting either file doesn’t affect the other; changes sync across links
@@ -84,7 +85,8 @@
 - Read Input:
     - `read -p "Prompt: " VAR`: From keyboard
     - `read VAR < file`: From file
-- Exit Code: `echo $?` (0 = success, 1 = failure)![[Pasted image 20250803221152.png]]
+- Exit Code: `echo $?` (0 = success, 1 = failure)<img width="894" height="330" alt="image" src="https://github.com/user-attachments/assets/fd196e77-7358-4bca-8d07-6f710b25402c" />
+
 ## Data Manipulation
 - `awk`: Complex text processing
 - `cut`: Extract columns (e.g., `cut -d " " -f 1 file.txt` for first space-separated column)
