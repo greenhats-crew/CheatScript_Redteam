@@ -13,9 +13,9 @@
 - **Quad word (qword)**: 8 bytes, 64 bits
 ### Sign and Unsign
 - **Signed**: can be positive or negative.
-→ The highest bit (MSB) shows the sign (0 = positive, 1 = negative). (Example: 11111111 → -1)
+  - The highest bit (MSB) shows the sign (0 = positive, 1 = negative). (Example: 11111111 -> -1, 10000000 -> -128  )
 - **Unsigned**: only positive numbers.
-→ All bits are used for the value. (Example: 11111111 → 255)
+  - All bits are used for the value. (Example: 11111111 → 255)
 
 
 ## Registers
