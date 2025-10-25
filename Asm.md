@@ -44,8 +44,8 @@
 - **Extending data**:
       - `movsx`: sign-extending move
     ```s
-    mov eax, -1 ; rax = 0x00000000ffffffff (4294967295 and -1)
-    movsx eax, -1 ; rax = 0xffffffffffffffff (18446744073709551615 and -1)
+    mov eax, -1 ; rax = 0x00000000ffffffff (unsiged: 4294967295/ signed: -1)
+    movsx eax, -1 ; rax = 0xffffffffffffffff (unsiged: 18446744073709551615 / signed: -1)
     ```
 ### Arithmetic
 | Instruction      | C / Math Equivalent                     | Description | Example |
