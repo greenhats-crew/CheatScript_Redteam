@@ -4,6 +4,12 @@
 - **Registers**: Fast, small storage inside the CPU for immediate data access.
 - **Memory (RAM)**: Larger, slower storage for program data and variables.
 - **Stack**: A special region of RAM operating on a Last-In-First-Out (LIFO) basis, used for temporary data and function calls.
+## Group Bytes
+- **Nibble**: half of a byte, 4 bits
+- **Byte**: 1 byte, 8 bits
+- **Half word / "word"**: 2 bytes, 16 bits
+- **Double word (dword)**: 4 bytes, 32 bits
+- **Quad word (qword)**: 8 bytes, 64 bits
 
 ## Registers
 - **Purpose**: Temporary storage for data and instructions during processing.
