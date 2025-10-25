@@ -4,12 +4,19 @@
 - **Registers**: Fast, small storage inside the CPU for immediate data access.
 - **Memory (RAM)**: Larger, slower storage for program data and variables.
 - **Stack**: A special region of RAM operating on a Last-In-First-Out (LIFO) basis, used for temporary data and function calls.
-## Group Bytes
+## Bytes
+### Group Bytes
 - **Nibble**: half of a byte, 4 bits
 - **Byte**: 1 byte, 8 bits
 - **Half word / "word"**: 2 bytes, 16 bits
 - **Double word (dword)**: 4 bytes, 32 bits
 - **Quad word (qword)**: 8 bytes, 64 bits
+### Sign and Unsign
+- **Signed**: can be positive or negative.
+→ The highest bit (MSB) shows the sign (0 = positive, 1 = negative). (Example: 11111111 → -1)
+- **Unsigned**: only positive numbers.
+→ All bits are used for the value. (Example: 11111111 → 255)
+
 
 ## Registers
 - **Purpose**: Temporary storage for data and instructions during processing.
