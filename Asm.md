@@ -37,7 +37,17 @@
     mov rax, 0xffffffffffffffff
     mov ax, 0x539     ; rax = 0xFFFFFFFFFFFF0539
     mov eax, 0x539    ; rax = 0x0000000000000539
+
+    mov eax, -1 ; rax = 0x00000000ffffffff
+    mov rax, -1 ; rax = 0xffffffffffffffff
     ```
+- **Extending data**:
+      - `movsx`: sign-extending move
+  ```s
+    mov eax, -1 ; rax = 0x00000000ffffffff (4294967295 and -1)
+    movsx eax, -1 ; rax = 0xffffffffffffffff (18446744073709551615 and -1)
+  ```
+  
 ## Assembly 101
 - **Instructions**:
     - `mov rax, 60`: Moves value 60 into `rax` (e.g., for `exit` system call).
