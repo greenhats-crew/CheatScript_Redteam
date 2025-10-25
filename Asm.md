@@ -106,7 +106,16 @@ mov rax, 0x12345    ; rax = address 0x12345
 mov rbx, [rax]      ; load 64-bit from 0x12345 to rbx
 mov rax, 0x133337   ; rax = address 0x133337
 mov [rax], ebx      ; store 32-bit from ebx to 0x133337
-``` 
+```
+### Little endian
+- Memory store in littel endian
+- Example
+  ```s
+  mov eax, 0xcafe ; eax = cafe
+  mov rcx, 0x12345 ; rcx = address 0x12345
+  mov [rcx], eax ; store 32-bit from eax to 0x12345 
+  mov bh, [rcx] ; load 8-bit high from 0x12345 to bh -> bh=fe
+  ```
 ## Assembly 101
 - **Instructions**:
     - `mov rax, 60`: Moves value 60 into `rax` (e.g., for `exit` system call).
