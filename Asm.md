@@ -98,7 +98,15 @@ push rcx
 ; Same thing
 sub rsp, 8 ; Cause each memory address references one byte in memory
 mov [rsp], rcx
-```  
+```
+### Control size
+- `[<register_store_memoryaddress>]` stores 8 bits by default. To load or store 32-bit or 64-bit data to/from another memory location, two registers are required: one for the memory address and one for the data.
+```s
+mov rax, 0x12345    ; rax = address 0x12345
+mov rbx, [rax]      ; load 64-bit from 0x12345 to rbx
+mov rax, 0x133337   ; rax = address 0x133337
+mov [rax], ebx      ; store 32-bit from ebx to 0x133337
+``` 
 ## Assembly 101
 - **Instructions**:
     - `mov rax, 60`: Moves value 60 into `rax` (e.g., for `exit` system call).
