@@ -29,6 +29,7 @@
     - `rip`: Instruction pointer, points to the next instruction to execute.
 - **Sub-Registers**: Smaller portions of `rax` (e.g., `eax` (32-bit), `ax` (16-bit), `al` (8-bit low), `ah` (8-bit high)).
     - Example: `mov al, 255` sets the lowest 8 bits of `rax`.
+<img width="543" height="798" alt="image" src="https://github.com/user-attachments/assets/7727ff70-f790-4a74-84ae-a5e7913522af" />
 
 ## Assembly 101
 - **Instructions**:
