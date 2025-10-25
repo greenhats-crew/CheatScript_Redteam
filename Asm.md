@@ -108,10 +108,10 @@ mov rax, 0x133337   ; rax = address 0x133337
 mov [rax], ebx      ; store 32-bit from ebx to 0x133337
 ```
 ### Little endian
-- Memory store in littel endian
+- Memory is stored in little endian, meaning the highest byte of a register is stored at the lowest memory address.
 - Example
   ```s
-  mov eax, 0xcafe ; eax = cafe
+  mov eax, 0xcafe ; eax = 0xcafe
   mov rcx, 0x12345 ; rcx = address 0x12345
   mov [rcx], eax ; store 32-bit from eax to 0x12345 
   mov bh, [rcx] ; load 8-bit high from 0x12345 to bh -> bh=fe
