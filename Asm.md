@@ -70,6 +70,8 @@
 ## Memory
 - Address: 0x10000 -> 0x7fffffffffff
   - Each memory address references one byte in memory
+    - Example: 8 bytes store at `0x133337` to `0x13333e` 
+    
 ### Stack
 - **Purpose**: Temporary storage in RAM, operates as LIFO.
 - **Operations**:
@@ -79,7 +81,24 @@
 - **Memory Transfer**:
     - `mov [rax], rbx`: Store `rbx` value at address in `rax`.
     - `mov rbx, [rax]`: Load value from address in `rax` to `rbx`.
-
+### Accessing memory
+- Using `[<register_store_memoryaddress>]`
+  - Example:
+  ```s
+  ; Move value of 0x12345 into rbx
+  mov rax, 0x12345
+  mov rbx, [rax]
+  ; Store value of rbx into 0x12345
+  mov rax, 0x12345
+  mov [rax], rbx
+  ```
+- `push`
+```s
+push rcx
+; Same thing
+sub rsp, 8 ; Cause each memory address references one byte in memory
+mov [rsp], rcx
+```  
 ## Assembly 101
 - **Instructions**:
     - `mov rax, 60`: Moves value 60 into `rax` (e.g., for `exit` system call).
