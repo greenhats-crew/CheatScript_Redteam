@@ -29,7 +29,15 @@
     - `rip`: Instruction pointer, points to the next instruction to execute.
 - **Sub-Registers**: Smaller portions of `rax` (e.g., `eax` (32-bit), `ax` (16-bit), `al` (8-bit low), `ah` (8-bit high)).
     - Example: `mov al, 255` sets the lowest 8 bits of `rax`.<img width="1683" height="592" alt="image" src="https://github.com/user-attachments/assets/96bff60a-abc4-43c4-90df-87f30b887bdd" /><img width="543" height="798" alt="image" src="https://github.com/user-attachments/assets/7727ff70-f790-4a74-84ae-a5e7913522af" />
-
+- **32-bit Caveat**
+    - Writing to eax ->  CPU zeros out the upper 32 bits of rax.
+    - Writing to ax, al, or ah -> upper bits remain unchanged.
+    - Example:
+    ```s
+    mov rax, 0xffffffffffffffff
+    mov ax, 0x539     ; rax = 0xFFFFFFFFFFFF0539
+    mov eax, 0x539    ; rax = 0x0000000000000539
+    ```
 ## Assembly 101
 - **Instructions**:
     - `mov rax, 60`: Moves value 60 into `rax` (e.g., for `exit` system call).
