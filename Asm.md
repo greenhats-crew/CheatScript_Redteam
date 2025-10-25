@@ -43,11 +43,29 @@
     ```
 - **Extending data**:
       - `movsx`: sign-extending move
-  ```s
+    ```s
     mov eax, -1 ; rax = 0x00000000ffffffff (4294967295 and -1)
     movsx eax, -1 ; rax = 0xffffffffffffffff (18446744073709551615 and -1)
-  ```
-  
+    ```
+### Arithmetic
+| Instruction      | C / Math Equivalent                     | Description |
+|------------------|------------------------------------------|-------------|
+| `add rax, rbx`   | `rax = rax + rbx`                       | Add `rbx` to `rax` |
+| `sub ebx, ecx`   | `ebx = ebx - ecx`                       | Subtract `ecx` from `ebx` |
+| `imul rsi, rdi`  | `rsi = rsi * rdi`                       | Multiply `rsi` by `rdi`, truncate to 64 bits |
+| `inc rdx`        | `rdx = rdx + 1`                         | Increment `rdx` by 1 |
+| `dec rdx`        | `rdx = rdx - 1`                         | Decrement `rdx` by 1 |
+| `neg rax`        | `rax = 0 - rax`                         | Negate numerical value of `rax` |
+| `not rax`        | `rax = ~rax`                            | Invert each bit of `rax` (bitwise NOT) |
+| `and rax, rbx`   | `rax = rax & rbx`                       | Bitwise AND between `rax` and `rbx` |
+| `or rax, rbx`    | `rax = rax \| rbx`                      | Bitwise OR between `rax` and `rbx` |
+| `xor rcx, rdx`   | `rcx = rcx ^ rdx`                       | Bitwise XOR (don’t confuse `^` with exponent) |
+| `shl rax, 10`    | `rax = rax << 10`                       | Shift bits of `rax` left by 10, fill right with 0s |
+| `shr rax, 10`    | `rax = rax >> 10`                       | Shift bits of `rax` right by 10, fill left with 0s |
+| `sar rax, 10`    | `rax = rax >> 10`                       | Arithmetic right shift — keeps sign bit (sign-extends) |
+| `ror rax, 10`    | `rax = (rax >> 10) \| (rax << 54)`      | Rotate bits of `rax` right by 10 |
+| `rol rax, 10`    | `rax = (rax << 10) \| (rax >> 54)`      | Rotate bits of `rax` left by 10 |
+
 ## Assembly 101
 - **Instructions**:
     - `mov rax, 60`: Moves value 60 into `rax` (e.g., for `exit` system call).
