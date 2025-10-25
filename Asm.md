@@ -67,6 +67,9 @@
 | `rol rax, 10`    | `rax = (rax << 10) \| (rax >> 54)`      | Rotate bits of `rax` left by 10 | `rax=0x123456789ABCDEF0` → rotated left by 10 bits |
 
 
+## Memory
+- Address: 0x10000 -> 0x7fffffffffff
+  - Each memory address references one byte in memory
 ## Assembly 101
 - **Instructions**:
     - `mov rax, 60`: Moves value 60 into `rax` (e.g., for `exit` system call).
