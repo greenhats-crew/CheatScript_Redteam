@@ -70,6 +70,16 @@
 ## Memory
 - Address: 0x10000 -> 0x7fffffffffff
   - Each memory address references one byte in memory
+### Stack
+- **Purpose**: Temporary storage in RAM, operates as LIFO.
+- **Operations**:
+    - `push rax`: Pushes `rax` value onto stack.
+    - `pop rax`: Pops top stack value into `rax`.
+- **Stack Pointer**: `rsp` register tracks the top of the stack.
+- **Memory Transfer**:
+    - `mov [rax], rbx`: Store `rbx` value at address in `rax`.
+    - `mov rbx, [rax]`: Load value from address in `rax` to `rbx`.
+
 ## Assembly 101
 - **Instructions**:
     - `mov rax, 60`: Moves value 60 into `rax` (e.g., for `exit` system call).
