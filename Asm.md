@@ -140,6 +140,15 @@ lea rax, [rip+8] # the address of the next instruction, plus 8 bytes
 mov rax, [rip] # load 8 bytes from the location pointed to by the address of the next instruction
 mov [rip], rax # write 8 bytes over the next instruction (CAVEATS APPLY
 ```
+### Write directly into a memory address
+- Must specify the data size when writing to memory.
+- Depending on the assembler, you may use DWORD or DWORD PTR
+```s
+mov rax, 0x133337              ; target memory address
+mov DWORD PTR [rax], 0x1337    ; write 32-bit value (0x1337) to [rax]
+; same as mov DWORD [rax], 0x1337 
+```
+
 ## Assembly 101
 - **Instructions**:
     - `mov rax, 60`: Moves value 60 into `rax` (e.g., for `exit` system call).
@@ -180,7 +189,6 @@ mov [rip], rax # write 8 bytes over the next instruction (CAVEATS APPLY
 ### Memory Operations
 - **Dereferencing**: Access value at a memory address stored in a register.
     - Example:
-        
         ```s
         mov rax, 0x133700  # Address 0x133700 contains 42
         mov rdi, rax       # rdi = 0x133700
