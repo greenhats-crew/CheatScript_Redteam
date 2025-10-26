@@ -265,6 +265,55 @@ callee:
     pop  rbx        ; restore before returning
     ret
 ```
+
+## System Call
+- **Purpose**: Interface for programs to interact with the OS.
+- **Mechanism**: Set `rax` to system call number, arguments in `rdi`, `rsi`, `rdx`, then execute `syscall`.
+```s
+; n = read(0, buf, 100);
+mov rdi, 0        ; stdin (file descriptor = 0)
+mov rsi, rsp       ; buffer on stack
+mov rdx, 100       ; 100 bytes
+mov rax, 0         ; syscall number = 0 (read)
+syscall            ; Read up to 100 bytes from stdin, and return the number of bytes actually read in rax. Because it call read() -> return rax  
+
+; write(1, buf, n)
+mov rdi, 1        ; stdout (file descriptor = 1)
+mov rsi, rsp       ; buffer on stack (data we read earlier)
+mov rdx, rax       ; number of bytes to write = number of bytes we just read
+mov rax, 1         ; syscall number for write
+syscall            ; write data to stdout
+```
+- Linux provides 300+ system calls.
+    - Each syscall has a unique ID number (placed in `rax` before syscall).
+      
+| System Call                    | Purpose                                         | Return Value                     |
+| ------------------------------ | ----------------------------------------------- | -------------------------------- |
+| `open(path, flags)`            | Opens a file                                    | New file descriptor (fd)         |
+| `read(fd, buf, count)`         | Reads data from a file descriptor into memory   | Number of bytes actually read    |
+| `write(fd, buf, count)`        | Writes data from memory to a file descriptor    | Number of bytes written          |
+| `fork()`                       | Creates a child process                         | 0 (child), PID of child (parent) |
+| `execve(filename, argv, envp)` | Replaces the current process with a new program | No return if successful          |
+| `wait(status)`                 | Waits for a child process to finish             | PID of the terminated child      |
+
+- Some system calls accept string arguments (e.g. file paths). A string is stored as contiguous bytes in memory and terminated by a 0 byte (null terminator).
+```s
+mov BYTE PTR [rsp+0], '/'   ; '/'
+mov BYTE PTR [rsp+1], 'f'   ; 'f'
+mov BYTE PTR [rsp+2], 'l'   ; 'l'
+mov BYTE PTR [rsp+3], 'a'   ; 'a'
+mov BYTE PTR [rsp+4], 'g'   ; 'g'
+mov BYTE PTR [rsp+5], 0     ; null terminator '\0'
+
+; open() "/flag"
+mov rdi, rsp   ; rdi = pointer to "/flag"
+mov rsi, 0     ; flags = O_RDONLY (read only) - Define Constant Arguments 
+mov rax, 2     ; syscall number for open()
+syscall        ; perform the system call
+```
+  - Constant Arguments <img width="1180" height="621" alt="image" src="https://github.com/user-attachments/assets/73b8907a-1ecd-4a4f-a3b5-77631cb65d3e" />
+
+
 ## Assembly 101
 - **Instructions**:
     - `mov rax, 60`: Moves value 60 into `rax` (e.g., for `exit` system call).
@@ -332,11 +381,7 @@ callee:
     - `mov rbx, [rax]`: Load value from address in `rax` to `rbx`.
 
 ## System Calls
-- **Purpose**: Interface for programs to interact with the OS.
-- **Mechanism**: Set `rax` to system call number, arguments in `rdi`, `rsi`, `rdx`, then execute `syscall`.
-- **Examples**:
-    - **Read**: `rax = 0`, `rdi` = file descriptor (e.g., 0 for stdin), `rsi` = buffer address, `rdx` = length.
-    - **Write**: `rax = 1`, `rdi` = file descriptor (e.g., 1 for stdout), `rsi` = buffer address, `rdx` = length.
+
 
 ## Arithmetic Operations
 - `add reg1, reg2`: `reg1 += reg2`
