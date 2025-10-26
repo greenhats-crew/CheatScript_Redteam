@@ -149,6 +149,49 @@ mov DWORD PTR [rax], 0x1337    ; write 32-bit value (0x1337) to [rax]
 ; same as mov DWORD [rax], 0x1337 
 ```
 
+## Control Flow
+### Jmp (jump)
+- Skip x bytes and resume execution.
+```s
+mov cx, 1337
+jmp STAY_LEET
+mov cx, 0 ; skip
+STAY_LEET:
+  push rcx
+```
+#### Condition
+- Conditions stored in the "flags" register: rflags (set rflag to 1)
+    - Carry Flag (`CF`): Set if the 65th bit is 1, meaning there was an unsigned overflow.
+    - Zero Flag (`ZF`): Set if the result is 0.
+    - Overflow Flag (`OF`): Set if the result overflowed the signed range, i.e., wrapped from positive to negative or vice versa (signed overflow).
+    - Signed Flag (`SF`): Set if the most significant bit (sign bit) of the result is 1 → the result is negative.
+- These flags are affected by instructions like `cmp` (temp value using `sub`) or test(temp value using `AND`) and are then used for conditional jumps.
+  ```s
+    ; ---------- CMP example ----------
+    mov eax, 5          ; eax = 5
+    cmp eax, 10         ; compare eax with 10 (eax - 10, result NOT stored, temp value = -5)
+                        ; Flags updated:
+                        ; CF = 1  -> unsigned 5 < 10
+                        ; ZF = 0  -> result != 0
+                        ; SF = 1  -> signed result negative
+                        ; OF = 0  -> no signed overflow
+    
+    jnz NOT_EQUAL       ; jump if ZF = 0 (i.e., eax != 10)
+    je  EQUAL           ; jump if ZF = 1 (i.e., eax == 10)
+  ```
+  ```s
+  ; ---------- TEST example ----------
+  mov eax, 0x10       ; eax = 0x10
+  test eax, eax       ; AND eax with itself (result NOT stored, temp value = 0x10)
+                      ; Flags updated:
+                      ; ZF = 0  -> eax != 0
+                      ; SF = 0  -> most significant bit not set
+                      ; CF = 0, OF = 0 usually cleared
+  
+  jnz NON_ZERO        ; jump if eax != 0
+  jz  IS_ZERO         ; jump if eax == 0
+ ```
+
 ## Assembly 101
 - **Instructions**:
     - `mov rax, 60`: Moves value 60 into `rax` (e.g., for `exit` system call).
