@@ -212,6 +212,38 @@ jz  IS_ZERO         ; jump if eax == 0
 | jz   | jump if zero | ZF = 1 |
 | jnz  | jump if not zero | ZF = 0 |
 
+#### loop using condition jump
+```s
+; Example: this counts to 10!
+mov rax, 0
+LOOP_HEADER:
+inc rax
+cmp rax, 10
+jb LOOP_HEADER
+; now rax is 10!
+```
+
+### call
+- Jumps to a function by pushing (`call` -> meaning `push`) the current RIP (instruction pointer) onto the stack, so that after the function finishes, execution returns (`ret` -> meaning `pop`) to the original RIP.<img width="1269" height="481" alt="image" src="https://github.com/user-attachments/assets/438dc240-3201-40d5-86df-a4cc401d3cc8" />
+#### Calling Conventions
+- **Caller:** The function that calls another function.  
+    - Responsible for passing arguments and handling the return value.
+- **Callee:** The function being called.  
+    - Responsible for preserving certain registers and returning a result.
+  
+| Architecture | Argument Passing | Return Register | Notes |
+|---------------|------------------|-----------------|--------|
+| **x86 (32-bit)** | Push arguments (in reverse order) onto the stack | `eax` | Caller pushes args before `call`, callee returns value in `eax` |
+| **amd64 (64-bit)** | `rdi`, `rsi`, `rdx`, `rcx`, `r8`, `r9` | `rax` | First 6 args in registers, rest on stack |
+| **ARM** | `r0`, `r1`, `r2`, `r3` | `r0` | Same idea — first few args in registers |
+
+- **Register Responsibilities (amd64)**
+  
+| Register Type | Registers | Responsible Function | Description |
+|----------------|------------|-----------------------|-------------|
+| **Callee-saved** | `rbx`, `rbp`, `r12–r15` | **Callee** | Must preserve their values (save/restore on stack) |
+| **Caller-saved** | `rax`, `rdi–r11` | **Caller** | Caller must save them before `call` if needed |
+| **Special** | `rsp` | Both | Stack pointer must always remain valid |
 
 ## Assembly 101
 - **Instructions**:
