@@ -191,6 +191,26 @@ STAY_LEET:
   jnz NON_ZERO        ; jump if eax != 0
   jz  IS_ZERO         ; jump if eax == 0
  ```
+#### Condition jmp
+| Jump | Meaning | Condition (flags) |
+|------|---------|------------------|
+| je   | jump if equal | ZF = 1 |
+| jne  | jump if not equal | ZF = 0 |
+| jg   | jump if greater (signed) | ZF = 0 and SF = OF |
+| jl   | jump if less (signed) | SF != OF |
+| jle  | jump if less or equal (signed) | ZF = 1 or SF != OF |
+| jge  | jump if greater or equal (signed) | SF = OF |
+| ja   | jump if above (unsigned) | CF = 0 and ZF = 0 |
+| jb   | jump if below (unsigned) | CF = 1 |
+| jae  | jump if above or equal (unsigned) | CF = 0 |
+| jbe  | jump if below or equal (unsigned) | CF = 1 or ZF = 1 |
+| js   | jump if signed | SF = 1 |
+| jns  | jump if not signed | SF = 0 |
+| jo   | jump if overflow | OF = 1 |
+| jno  | jump if not overflow | OF = 0 |
+| jz   | jump if zero | ZF = 1 |
+| jnz  | jump if not zero | ZF = 0 |
+
 
 ## Assembly 101
 - **Instructions**:
