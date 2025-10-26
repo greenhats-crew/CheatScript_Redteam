@@ -166,31 +166,32 @@ STAY_LEET:
     - Overflow Flag (`OF`): Set if the result overflowed the signed range, i.e., wrapped from positive to negative or vice versa (signed overflow).
     - Signed Flag (`SF`): Set if the most significant bit (sign bit) of the result is 1 → the result is negative.
 - These flags are affected by instructions like `cmp` (temp value using `sub`) or test(temp value using `AND`) and are then used for conditional jumps.
-  ```s
-    ; ---------- CMP example ----------
-    mov eax, 5          ; eax = 5
-    cmp eax, 10         ; compare eax with 10 (eax - 10, result NOT stored, temp value = -5)
-                        ; Flags updated:
-                        ; CF = 1  -> unsigned 5 < 10
-                        ; ZF = 0  -> result != 0
-                        ; SF = 1  -> signed result negative
-                        ; OF = 0  -> no signed overflow
-    
-    jnz NOT_EQUAL       ; jump if ZF = 0 (i.e., eax != 10)
-    je  EQUAL           ; jump if ZF = 1 (i.e., eax == 10)
-  ```
-  ```s
-  ; ---------- TEST example ----------
-  mov eax, 0x10       ; eax = 0x10
-  test eax, eax       ; AND eax with itself (result NOT stored, temp value = 0x10)
+```s
+  ; ---------- CMP example ----------
+  mov eax, 5          ; eax = 5
+  cmp eax, 10         ; compare eax with 10 (eax - 10, result NOT stored, temp value = -5)
                       ; Flags updated:
-                      ; ZF = 0  -> eax != 0
-                      ; SF = 0  -> most significant bit not set
-                      ; CF = 0, OF = 0 usually cleared
+                      ; CF = 1  -> unsigned 5 < 10
+                      ; ZF = 0  -> result != 0
+                      ; SF = 1  -> signed result negative
+                      ; OF = 0  -> no signed overflow
   
-  jnz NON_ZERO        ; jump if eax != 0
-  jz  IS_ZERO         ; jump if eax == 0
- ```
+  jnz NOT_EQUAL       ; jump if ZF = 0 (i.e., eax != 10)
+  je  EQUAL           ; jump if ZF = 1 (i.e., eax == 10)
+```
+  
+```s
+; ---------- TEST example ----------
+mov eax, 0x10       ; eax = 0x10
+test eax, eax       ; AND eax with itself (result NOT stored, temp value = 0x10)
+                    ; Flags updated:
+                    ; ZF = 0  -> eax != 0
+                    ; SF = 0  -> most significant bit not set
+                    ; CF = 0, OF = 0 usually cleared
+
+jnz NON_ZERO        ; jump if eax != 0
+jz  IS_ZERO         ; jump if eax == 0
+```
 #### Condition jmp
 | Jump | Meaning | Condition (flags) |
 |------|---------|------------------|
