@@ -313,6 +313,42 @@ syscall        ; perform the system call
 ```
   - Constant Arguments <img width="1180" height="621" alt="image" src="https://github.com/user-attachments/assets/73b8907a-1ecd-4a4f-a3b5-77631cb65d3e" />
 
+## Build Program
+```s
+.intel_syntax noprefix
+.global _start
+_start:
+    mov rdi, 42    ; exit code
+    mov rax, 60    ; syscall: exit
+    syscall
+```
+```c
+# compile & link (no C runtime)
+gcc -no-pie -nostdlib -o quitter quitter.s
+# run
+./quitter
+# check exit code (should print 42)
+echo $?
+
+# Dissembly program
+objdump -M intel -d quitter
+
+# Dump .text (program part only - not including header)
+objcopy --dump-section .text=quitter_binary_code quitter
+```
+- **Debug**
+```s
+mov rdi, 42 // our program's return code (e.g., for bash scripts)
+mov rax, 60 // system call number of exit()
+int3 // trigger the debugger with a breakpoint!
+syscall // do the system call
+```
+- Tool: `gdb`, `strace`, `Rappel`
+    - **strace**: Tracks system calls made by a program.
+      - Example: `strace ./program` shows calls like `exit(42)`.
+    - **GDB (GNU Debugger)**:
+      - Run: `gdb <file>`.
+      - Start at first instruction: `starti`.
 
 ## Assembly 101
 - **Instructions**:
