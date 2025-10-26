@@ -130,6 +130,16 @@ lea rbx, [rsp + rax*8 + 5]       ; rbx = computed address (for checking or later
 mov rbx, [rbx]                   ; read qword at that address
 ```
 - **Formula**: `reg+reg*(2 or 4 or 8)+value`
+
+### RIP (Instruction pointer register)
+- Holds the address of the next instruction to execute.
+- CPU automatically updates it after each instruction (like how `rsp` moves on the stack).
+```s
+lea rax, [rip] # load the address of the next instruction into rax
+lea rax, [rip+8] # the address of the next instruction, plus 8 bytes
+mov rax, [rip] # load 8 bytes from the location pointed to by the address of the next instruction
+mov [rip], rax # write 8 bytes over the next instruction (CAVEATS APPLY
+```
 ## Assembly 101
 - **Instructions**:
     - `mov rax, 60`: Moves value 60 into `rax` (e.g., for `exit` system call).
