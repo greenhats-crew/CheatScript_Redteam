@@ -129,7 +129,7 @@ mov rcx, [rsp + rax*8]; read next qword
 lea rbx, [rsp + rax*8 + 5]       ; rbx = computed address (for checking or later use)
 mov rbx, [rbx]                   ; read qword at that address
 ```
-- **reg+reg*(2 or 4 or 8)+value **
+- **reg+reg*(2 or 4 or 8)+value**
 ## Assembly 101
 - **Instructions**:
     - `mov rax, 60`: Moves value 60 into `rax` (e.g., for `exit` system call).
