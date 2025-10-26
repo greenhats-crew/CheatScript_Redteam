@@ -237,6 +237,17 @@ jb LOOP_HEADER
 | **amd64 (64-bit)** | `rdi`, `rsi`, `rdx`, `rcx`, `r8`, `r9` | `rax` | First 6 args in registers, rest on stack |
 | **ARM** | `r0`, `r1`, `r2`, `r3` | `r0` | Same idea — first few args in registers |
 
+```s
+; Caller
+mov rdi, 5
+mov rsi, 10
+call add_numbers
+; Callee
+add_numbers:
+    mov rax, rdi
+    add rax, rsi
+    ret
+```
 - **Register Responsibilities (amd64)**
   
 | Register Type | Registers | Responsible Function | Description |
@@ -245,6 +256,15 @@ jb LOOP_HEADER
 | **Caller-saved** | `rax`, `rdi–r11` | **Caller** | Caller must save them before `call` if needed |
 | **Special** | `rsp` | Both | Stack pointer must always remain valid |
 
+```s
+; Callee-saved
+callee:
+    push rbx        ; save old rbx
+    mov  rbx, 123
+    ; ... do something ...
+    pop  rbx        ; restore before returning
+    ret
+```
 ## Assembly 101
 - **Instructions**:
     - `mov rax, 60`: Moves value 60 into `rax` (e.g., for `exit` system call).
