@@ -116,6 +116,20 @@ mov [rax], ebx      ; store 32-bit from ebx to 0x133337
   mov [rcx], eax ; store 32-bit from eax to 0x12345 
   mov bh, [rcx] ; load 8-bit high from 0x12345 to bh -> bh=fe
   ```
+### Copy Stack Value
+- Get values from the stack (useful for debugging or inspecting memory).
+```s
+mov rax, 0 ; rax = 0
+mov rbx, [rsp + rax*8] ; read first qword from stack
+inc rax
+mov rcx, [rsp + rax*8]; read next qword
+```
+- Use `lea` to compute an address without reading memory.
+```s
+lea rbx, [rsp + rax*8 + 5]       ; rbx = computed address (for checking or later use)
+mov rbx, [rbx]                   ; read qword at that address
+```
+- **reg+reg*(2 or 4 or 8)+value **
 ## Assembly 101
 - **Instructions**:
     - `mov rax, 60`: Moves value 60 into `rax` (e.g., for `exit` system call).
