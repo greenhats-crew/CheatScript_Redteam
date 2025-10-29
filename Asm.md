@@ -53,7 +53,7 @@
 | `add rax, rbx`  | `rax = rax + rbx`                                  | Add `rbx` to `rax`                                                                            | `rax=5`, `rbx=3` → `rax=8`                          |
 | `sub ebx, ecx`  | `ebx = ebx - ecx`                                  | Subtract `ecx` from `ebx`                                                                     | `ebx=10`, `ecx=4` → `ebx=6`                         |
 | `imul rsi, rdi` | `rsi = rsi * rdi`                                  | Multiply `rsi` by `rdi`, truncate to 64 bits                                                  | `rsi=6`, `rdi=7` → `rsi=42`                         |
-| `div rcx`       | `rax = (rdx:rax) / rcx`<br>`rdx = (rdx:rax) % rcx` | Unsigned divide 128-bit dividend (`rdx:rax`) by `rcx` → quotient in `rax`, remainder in `rdx` | `rax=10`, `rdx=0`, `rcx=3` → `rax=3`, `rdx=1`       |
+| `div reg`   | `rax = (rdx:rax) / reg`<br>`rdx = (rdx:rax) % reg` | Unsigned divide — divides 128-bit dividend (`rdx:rax`) by `reg`.<br>Stores **quotient** in `rax` and **remainder** in `rdx`. | **Normal case:**<br>`mov rax, 10`<br>`mov rdx, 0`<br>`mov rcx, 3`<br>`div rcx` → `rax=3`, `rdx=1`<br><br>**Special case (`rdx≠0`):**<br>`mov rax, 10`<br>`mov rdx, 2`<br>`mov rcx, 3`<br>`div rcx` → `rax=12297829382473034414`, `rdx=0` |
 | `inc rdx`       | `rdx = rdx + 1`                                    | Increment `rdx` by 1                                                                          | `rdx=9` → `rdx=10`                                  |
 | `dec rdx`       | `rdx = rdx - 1`                                    | Decrement `rdx` by 1                                                                          | `rdx=5` → `rdx=4`                                   |
 | `neg rax`       | `rax = 0 - rax`                                    | Negate numerical value of `rax`                                                               | `rax=5` → `rax=-5`                                  |
@@ -66,6 +66,7 @@
 | `sar rax, 10`   | `rax = rax >> 10`                                  | Arithmetic right shift — keeps sign bit (sign-extends)                                        | `rax=0b1111000000000000` → `rax=0b1111111111111111` |
 | `ror rax, 10`   | `rax = (rax >> 10) \| (rax << 54)`                 | Rotate bits of `rax` right by 10                                                              | `rax=0x123456789ABCDEF0` → rotated right by 10 bits |
 | `rol rax, 10`   | `rax = (rax << 10) \| (rax >> 54)`                 | Rotate bits of `rax` left by 10                                                               | `rax=0x123456789ABCDEF0` → rotated left by 10 bits  |
+| Instruction | C / Math Equivalent                                | Description                                                                                                                  | Example                                            
 
 
 
