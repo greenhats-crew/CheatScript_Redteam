@@ -48,23 +48,25 @@
     movsx eax, -1 ; rax = 0xffffffffffffffff (unsiged: 18446744073709551615 / signed: -1)
     ```
 ### Arithmetic
-| Instruction      | C / Math Equivalent                     | Description | Example |
-|------------------|------------------------------------------|-------------|----------|
-| `add rax, rbx`   | `rax = rax + rbx`                       | Add `rbx` to `rax` | `rax=5`, `rbx=3` → `rax=8` |
-| `sub ebx, ecx`   | `ebx = ebx - ecx`                       | Subtract `ecx` from `ebx` | `ebx=10`, `ecx=4` → `ebx=6` |
-| `imul rsi, rdi`  | `rsi = rsi * rdi`                       | Multiply `rsi` by `rdi`, truncate to 64 bits | `rsi=6`, `rdi=7` → `rsi=42` |
-| `inc rdx`        | `rdx = rdx + 1`                         | Increment `rdx` by 1 | `rdx=9` → `rdx=10` |
-| `dec rdx`        | `rdx = rdx - 1`                         | Decrement `rdx` by 1 | `rdx=5` → `rdx=4` |
-| `neg rax`        | `rax = 0 - rax`                         | Negate numerical value of `rax` | `rax=5` → `rax=-5` |
-| `not rax`        | `rax = ~rax`                            | Invert each bit of `rax` (bitwise NOT) | `rax=0b1010` → `rax=0b0101` |
-| `and rax, rbx`   | `rax = rax & rbx`                       | Bitwise AND between `rax` and `rbx` | `rax=0b1100`, `rbx=0b1010` → `rax=0b1000` |
-| `or rax, rbx`    | `rax = rax \| rbx`                      | Bitwise OR between `rax` and `rbx` | `rax=0b1100`, `rbx=0b1010` → `rax=0b1110` |
-| `xor rcx, rdx`   | `rcx = rcx ^ rdx`                       | Bitwise XOR (don’t confuse `^` with exponent) | `rcx=0b1100`, `rdx=0b1010` → `rcx=0b0110` |
-| `shl rax, 10`    | `rax = rax << 10`                       | Shift bits of `rax` left by 10, fill right with 0s | `rax=0b1` → `rax=0b10000000000` |
-| `shr rax, 10`    | `rax = rax >> 10`                       | Shift bits of `rax` right by 10, fill left with 0s | `rax=0b10000000000` → `rax=0b1` |
-| `sar rax, 10`    | `rax = rax >> 10`                       | Arithmetic right shift — keeps sign bit (sign-extends) | `rax=0b1111000000000000` → `rax=0b1111111111111111` |
-| `ror rax, 10`    | `rax = (rax >> 10) \| (rax << 54)`      | Rotate bits of `rax` right by 10 | `rax=0x123456789ABCDEF0` → rotated right by 10 bits |
-| `rol rax, 10`    | `rax = (rax << 10) \| (rax >> 54)`      | Rotate bits of `rax` left by 10 | `rax=0x123456789ABCDEF0` → rotated left by 10 bits |
+| Instruction     | C / Math Equivalent                                | Description                                                                                   | Example                                             |
+| --------------- | -------------------------------------------------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------- |
+| `add rax, rbx`  | `rax = rax + rbx`                                  | Add `rbx` to `rax`                                                                            | `rax=5`, `rbx=3` → `rax=8`                          |
+| `sub ebx, ecx`  | `ebx = ebx - ecx`                                  | Subtract `ecx` from `ebx`                                                                     | `ebx=10`, `ecx=4` → `ebx=6`                         |
+| `imul rsi, rdi` | `rsi = rsi * rdi`                                  | Multiply `rsi` by `rdi`, truncate to 64 bits                                                  | `rsi=6`, `rdi=7` → `rsi=42`                         |
+| `div rcx`       | `rax = (rdx:rax) / rcx`<br>`rdx = (rdx:rax) % rcx` | Unsigned divide 128-bit dividend (`rdx:rax`) by `rcx` → quotient in `rax`, remainder in `rdx` | `rax=10`, `rdx=0`, `rcx=3` → `rax=3`, `rdx=1`       |
+| `inc rdx`       | `rdx = rdx + 1`                                    | Increment `rdx` by 1                                                                          | `rdx=9` → `rdx=10`                                  |
+| `dec rdx`       | `rdx = rdx - 1`                                    | Decrement `rdx` by 1                                                                          | `rdx=5` → `rdx=4`                                   |
+| `neg rax`       | `rax = 0 - rax`                                    | Negate numerical value of `rax`                                                               | `rax=5` → `rax=-5`                                  |
+| `not rax`       | `rax = ~rax`                                       | Invert each bit of `rax` (bitwise NOT)                                                        | `rax=0b1010` → `rax=0b0101`                         |
+| `and rax, rbx`  | `rax = rax & rbx`                                  | Bitwise AND between `rax` and `rbx`                                                           | `rax=0b1100`, `rbx=0b1010` → `rax=0b1000`           |
+| `or rax, rbx`   | `rax = rax \| rbx`                                 | Bitwise OR between `rax` and `rbx`                                                            | `rax=0b1100`, `rbx=0b1010` → `rax=0b1110`           |
+| `xor rcx, rdx`  | `rcx = rcx ^ rdx`                                  | Bitwise XOR (don’t confuse `^` with exponent)                                                 | `rcx=0b1100`, `rdx=0b1010` → `rcx=0b0110`           |
+| `shl rax, 10`   | `rax = rax << 10`                                  | Shift bits of `rax` left by 10, fill right with 0s                                            | `rax=0b1` → `rax=0b10000000000`                     |
+| `shr rax, 10`   | `rax = rax >> 10`                                  | Shift bits of `rax` right by 10, fill left with 0s                                            | `rax=0b10000000000` → `rax=0b1`                     |
+| `sar rax, 10`   | `rax = rax >> 10`                                  | Arithmetic right shift — keeps sign bit (sign-extends)                                        | `rax=0b1111000000000000` → `rax=0b1111111111111111` |
+| `ror rax, 10`   | `rax = (rax >> 10) \| (rax << 54)`                 | Rotate bits of `rax` right by 10                                                              | `rax=0x123456789ABCDEF0` → rotated right by 10 bits |
+| `rol rax, 10`   | `rax = (rax << 10) \| (rax >> 54)`                 | Rotate bits of `rax` left by 10                                                               | `rax=0x123456789ABCDEF0` → rotated left by 10 bits  |
+
 
 
 ## Memory
