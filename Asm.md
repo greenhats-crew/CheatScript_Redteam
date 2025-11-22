@@ -182,7 +182,7 @@ STAY_LEET:
   jnz NOT_EQUAL       ; jump if ZF = 0 (i.e., eax != 10)
   je  EQUAL           ; jump if ZF = 1 (i.e., eax == 10)
 ```
-  
+  ump-section
 ```s
 ; ---------- TEST example ----------
 mov eax, 0x10       ; eax = 0x10
@@ -340,7 +340,7 @@ echo $?
 objdump -M intel -d quitter
 
 # Dump .text section (program part only - not including header)
-objcopy --dump-section=.text quitter_textsection quitter
+objcopy --dump-section=.text=quitter_textsection quitter
 ```
 - **Debug**
 ```s
