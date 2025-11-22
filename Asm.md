@@ -339,8 +339,8 @@ echo $?
 # Dissembly program
 objdump -M intel -d quitter
 
-# Dump .text (program part only - not including header)
-objcopy --dump-section .text=quitter_binary_code quitter
+# Dump .text section (program part only - not including header)
+objcopy --dump-section=.text quitter_textsection quitter
 ```
 - **Debug**
 ```s
