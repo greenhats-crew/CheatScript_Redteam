@@ -328,6 +328,9 @@ _start:
 ```c
 # compile & link (no C runtime)
 gcc -no-pie -nostdlib -o quitter quitter.s
+OR
+as -o quitter.o quitter.s
+ld -o quitter quitter.o // link object file
 # run
 ./quitter
 # check exit code (should print 42)
