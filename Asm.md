@@ -406,7 +406,7 @@ syscall // do the system call
 - Local variables live **below** `rbp` (e.g., `[rbp - offset]`) because the stack grows downward.
 - Before returning, the function restores `rsp` to `rbp` to reset the stack.
 
-#### Example (allocate 5 dwords and set `list[2] = 1337`):
+- **Example (allocate 5 dwords and set `list[2] = 1337`):**
 ```asm
 mov rbp, rsp        ; create frame base
 sub rsp, 0x14       ; allocate 5 dwords (5 * 4 bytes)
