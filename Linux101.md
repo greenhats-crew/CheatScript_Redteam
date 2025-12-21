@@ -130,6 +130,22 @@
         - `what`: `r`, `w`, `x`
         - `+`: Add, `-`: Remove, `=`: Set
         - Example: `chmod a=r,u=rw file` (all read, user read/write)
+### Special Bits
+- **SetUID (SUID)** (octal 4):
+    - On executables: EUID = owner (usually root).
+    - Set: `sudo chmod u+s <file>` or 4755
+    - Shown: `-rwsr-xr-x`
+    - Examples: `/usr/bin/passwd, /usr/bin/sudo`
+- **SetGID (SGID)** (octal 2):
+    - Executables: EGID = group.
+    - Directories: New files inherit group.
+    - Set: `sudo chmod g+s <file/dir>` or `2755`
+    - Shown: `-rwxr-sr-x` or `drwxr-sr-x`
+- **Sticky Bit** (octal 1):
+    - Directories: Only owner/root can delete files.
+    - Set: `chmod +t <dir>` or `1777`
+    - Shown: `drwxrwxrwt`
+    - Example: `/tmp`
 - **SUID Bit**: `chmod u+s <program>` (run as owner, shown as `s` in `ls -l`)
 - **Sticky Bit**: `chmod +t <dir>` (only owner can rename/delete, shown as `t`)
 ## Command Chaining
