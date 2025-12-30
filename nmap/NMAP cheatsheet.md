@@ -1,5 +1,7 @@
 #### Scan network range
 - `sudo nmap <network>/<subnet> -sn -oA exist_hosts | grep for | cut -d" " -f5`
+	- Agressive: `sudo nmap -T5 -n -sn --min-parallelism 100 <network>/<subnet>`
+	- Super Agres: `sudo nmap -T5 -n -sn --min-parallelism 256 --max-rtt-timeout 200ms --max-retries 1 <network>/<subnet>`  	
 - `sudo nmap -sn -oA tnet -iL hosts.lst | grep for | cut -d " " -f5`
 	- hosts.lst: ip list
 #### Port scan
