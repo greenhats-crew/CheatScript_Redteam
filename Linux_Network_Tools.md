@@ -659,18 +659,3 @@ dig -x 8.8.8.8
 # Specify DNS server
 dig @8.8.8.8 google.com
 ```
-
-### `curl` / `wget`
-```bash
-# HTTP request
-curl http://example.com
-
-# Headers only
-curl -I http://example.com
-
-# POST request
-curl -X POST -d "param=value" http://example.com
-
-# Download file
-wget http://example.com/file.txt
-```
