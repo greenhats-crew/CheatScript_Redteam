@@ -382,7 +382,7 @@ tcp.port == 80 || tcp.port == 443  # HTTP or HTTPS
 # Content filters
 http.request.method == "POST"   # HTTP POST requests
 http.host contains "google"     # HTTP host contains "google"
-tcp contains "password"         # TCP payload contains "password"
+tcp contains "password"         # TCP payload contains "password"Ether type=0xFFFF
 
 # Status codes
 http.response.code == 404       # HTTP 404 errors
