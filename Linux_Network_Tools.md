@@ -6,6 +6,7 @@
 Connect to a specific host/port:
 ```bash
 nc <ip> <port>
+UDP connect: nc -u <ip> <port>  
 ```
 
 **Examples:**
