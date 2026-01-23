@@ -312,3 +312,354 @@ ord(char) ^ int   → int
 ```
 
 **Remember:** XOR is reversible, so `(A ^ B) ^ B = A`
+
+# AES Cipher Notes
+
+## Theory
+
+AES (Advanced Encryption Standard) is a symmetric block cipher.
+
+**Key facts:**
+- Block size: 128 bits (16 bytes)
+- Key sizes: 128, 192, or 256 bits (16, 24, or 32 bytes)
+- Encrypts data in 16-byte blocks
+- Same key for encryption and decryption
+
+**Common modes:**
+- **ECB** (Electronic Codebook): Each block encrypted independently (insecure, don't use)
+- **CBC** (Cipher Block Chaining): Each block XORed with previous ciphertext, needs IV
+- **CTR** (Counter): Stream cipher mode, needs nonce
+- **GCM** (Galois/Counter Mode): Authenticated encryption, provides integrity
+
+**Padding:**
+- AES requires input to be multiple of 16 bytes
+- **PKCS7**: Pad with bytes, each byte = number of padding bytes
+- Example: `"HELLO"` → `"HELLO\x0b\x0b\x0b\x0b\x0b\x0b\x0b\x0b\x0b\x0b\x0b"`
+
+---
+
+## Python Examples
+
+### Setup
+```python
+>>> from Crypto.Cipher import AES
+>>> from Crypto.Random import get_random_bytes
+>>> from Crypto.Util.Padding import pad, unpad
+```
+
+### AES-ECB (simplest, but insecure)
+
+```python
+>>> key = b'YELLOW SUBMARINE'  # 16 bytes
+>>> plaintext = b'SECRET MESSAGE!!'  # 16 bytes
+
+>>> cipher = AES.new(key, AES.MODE_ECB)
+>>> ciphertext = cipher.encrypt(plaintext)
+>>> ciphertext.hex()
+'7c8d9c16e5d9c4e8f2b3a1d4c8e7f6a2'
+
+>>> # Decrypt
+>>> cipher = AES.new(key, AES.MODE_ECB)
+>>> decrypted = cipher.decrypt(ciphertext)
+>>> decrypted
+b'SECRET MESSAGE!!'
+```
+
+### AES-ECB with padding
+
+```python
+>>> key = b'YELLOW SUBMARINE'
+>>> plaintext = b'Hello World'  # Not 16 bytes!
+
+>>> # Pad to 16-byte boundary
+>>> padded = pad(plaintext, 16)
+>>> padded
+b'Hello World\x05\x05\x05\x05\x05'
+
+>>> cipher = AES.new(key, AES.MODE_ECB)
+>>> ciphertext = cipher.encrypt(padded)
+>>> ciphertext.hex()
+'a1b2c3d4e5f6...'
+
+>>> # Decrypt and unpad
+>>> cipher = AES.new(key, AES.MODE_ECB)
+>>> decrypted = unpad(cipher.decrypt(ciphertext), 16)
+>>> decrypted
+b'Hello World'
+```
+
+### AES-CBC (needs IV)
+
+```python
+>>> key = get_random_bytes(16)
+>>> iv = get_random_bytes(16)  # Initialization Vector
+>>> plaintext = b'Secret message here'
+
+>>> cipher = AES.new(key, AES.MODE_CBC, iv)
+>>> ciphertext = cipher.encrypt(pad(plaintext, 16))
+>>> ciphertext.hex()
+'f3a8b7c9...'
+
+>>> # Decrypt (need same IV!)
+>>> cipher = AES.new(key, AES.MODE_CBC, iv)
+>>> decrypted = unpad(cipher.decrypt(ciphertext), 16)
+>>> decrypted
+b'Secret message here'
+
+>>> # Note: Store IV with ciphertext
+>>> combined = iv + ciphertext
+>>> # To decrypt: iv = combined[:16], ct = combined[16:]
+```
+
+### AES-CTR (stream cipher mode)
+
+```python
+>>> from Crypto.Util import Counter
+
+>>> key = get_random_bytes(16)
+>>> nonce = get_random_bytes(8)
+
+>>> # CTR mode - no padding needed!
+>>> cipher = AES.new(key, AES.MODE_CTR, nonce=nonce)
+>>> plaintext = b'Any length message works!'
+>>> ciphertext = cipher.encrypt(plaintext)
+>>> ciphertext.hex()
+'a8f7b3c4...'
+
+>>> # Decrypt
+>>> cipher = AES.new(key, AES.MODE_CTR, nonce=nonce)
+>>> decrypted = cipher.decrypt(ciphertext)
+>>> decrypted
+b'Any length message works!'
+```
+
+### AES-GCM (authenticated encryption)
+
+```python
+>>> key = get_random_bytes(16)
+>>> nonce = get_random_bytes(12)  # GCM uses 12-byte nonce
+
+>>> cipher = AES.new(key, AES.MODE_GCM, nonce=nonce)
+>>> plaintext = b'Authenticated message'
+>>> ciphertext, tag = cipher.encrypt_and_digest(plaintext)
+
+>>> ciphertext.hex()
+'f8a3b2c1...'
+>>> tag.hex()  # Authentication tag
+'d4e5f6a7...'
+
+>>> # Decrypt and verify
+>>> cipher = AES.new(key, AES.MODE_GCM, nonce=nonce)
+>>> decrypted = cipher.decrypt_and_verify(ciphertext, tag)
+>>> decrypted
+b'Authenticated message'
+
+>>> # Wrong tag = exception
+>>> cipher = AES.new(key, AES.MODE_GCM, nonce=nonce)
+>>> cipher.decrypt_and_verify(ciphertext, b'wrong tag!!!')
+ValueError: MAC check failed
+```
+
+### Working with hex/base64
+
+```python
+>>> import base64
+
+>>> key = bytes.fromhex('0123456789abcdef0123456789abcdef')
+>>> plaintext = b'Hello'
+
+>>> cipher = AES.new(key, AES.MODE_ECB)
+>>> ciphertext = cipher.encrypt(pad(plaintext, 16))
+
+>>> # To hex
+>>> ciphertext.hex()
+'a7b8c9d0...'
+
+>>> # To base64
+>>> base64.b64encode(ciphertext).decode()
+'p7jJ0A...'
+
+>>> # From hex
+>>> ct = bytes.fromhex('a7b8c9d0...')
+
+>>> # From base64
+>>> ct = base64.b64decode('p7jJ0A...')
+```
+
+### Encrypt/Decrypt file-like data
+
+```python
+>>> key = b'YELLOW SUBMARINE'
+>>> data = b'A' * 1000  # Large data
+
+>>> # Encrypt in ECB mode
+>>> cipher = AES.new(key, AES.MODE_ECB)
+>>> encrypted = cipher.encrypt(pad(data, 16))
+>>> len(encrypted)
+1008  # Padded to multiple of 16
+
+>>> # Decrypt
+>>> cipher = AES.new(key, AES.MODE_ECB)
+>>> decrypted = unpad(cipher.decrypt(encrypted), 16)
+>>> decrypted == data
+True
+```
+
+### Manual padding (PKCS7)
+
+```python
+>>> def pkcs7_pad(data, block_size=16):
+...     padding_len = block_size - (len(data) % block_size)
+...     return data + bytes([padding_len] * padding_len)
+
+>>> pkcs7_pad(b'HELLO')
+b'HELLO\x0b\x0b\x0b\x0b\x0b\x0b\x0b\x0b\x0b\x0b\x0b'
+
+>>> pkcs7_pad(b'YELLOW SUBMARINE')  # Already 16 bytes
+b'YELLOW SUBMARINE\x10\x10\x10\x10\x10\x10\x10\x10\x10\x10\x10\x10\x10\x10\x10\x10'
+
+>>> def pkcs7_unpad(data):
+...     padding_len = data[-1]
+...     return data[:-padding_len]
+
+>>> pkcs7_unpad(b'HELLO\x0b\x0b\x0b\x0b\x0b\x0b\x0b\x0b\x0b\x0b\x0b')
+b'HELLO'
+```
+
+### ECB detection (same blocks → same ciphertext)
+
+```python
+>>> key = b'YELLOW SUBMARINE'
+>>> plaintext = b'A' * 48  # Three identical blocks
+
+>>> cipher = AES.new(key, AES.MODE_ECB)
+>>> ciphertext = cipher.encrypt(plaintext)
+
+>>> # Split into blocks
+>>> blocks = [ciphertext[i:i+16] for i in range(0, len(ciphertext), 16)]
+>>> blocks[0] == blocks[1] == blocks[2]
+True  # ECB encrypts identical blocks identically!
+
+>>> # CBC would have different blocks
+>>> cipher = AES.new(key, AES.MODE_CBC, iv=b'\x00'*16)
+>>> ciphertext_cbc = cipher.encrypt(plaintext)
+>>> blocks_cbc = [ciphertext_cbc[i:i+16] for i in range(0, len(ciphertext_cbc), 16)]
+>>> blocks_cbc[0] == blocks_cbc[1]
+False  # CBC produces different ciphertext
+```
+
+### Byte-at-a-time ECB decryption (oracle attack)
+
+```python
+>>> # Example: Known plaintext attack on ECB
+>>> key = get_random_bytes(16)
+>>> secret = b'SECRET'
+
+>>> def encryption_oracle(data):
+...     cipher = AES.new(key, AES.MODE_ECB)
+...     return cipher.encrypt(pad(data + secret, 16))
+
+>>> # Attack: Discover secret byte-by-byte
+>>> # Block 1: AAAAAAAAAAAAAAA? (15 A's + 1 unknown)
+>>> for guess in range(256):
+...     test = b'A' * 15 + bytes([guess])
+...     if encryption_oracle(test)[:16] == encryption_oracle(b'A' * 15)[:16]:
+...         print(f'First byte: {chr(guess)}')
+...         break
+First byte: S
+```
+
+### CBC bit flipping
+
+```python
+>>> key = get_random_bytes(16)
+>>> iv = get_random_bytes(16)
+
+>>> plaintext = b'admin=false;uid='
+>>> cipher = AES.new(key, AES.MODE_CBC, iv)
+>>> ciphertext = cipher.encrypt(pad(plaintext, 16))
+
+>>> # Flip bits in ciphertext to change next block's plaintext
+>>> # If we XOR ciphertext[0] with X, plaintext[16] will XOR with X
+>>> modified_ct = bytearray(ciphertext)
+>>> # Change 'false' to 'true;' by flipping bits
+>>> # (This is simplified - actual attack needs careful calculation)
+```
+
+### Common CTF patterns
+
+**Known plaintext (e.g., flag format):**
+```python
+>>> # If you know ciphertext and partial plaintext
+>>> known_plain = b'flag{...'
+>>> ciphertext_block = bytes.fromhex('a1b2c3d4e5f6g7h8...')
+
+>>> # In ECB, try to match patterns
+>>> # In CBC, IV ⊕ plaintext = decrypted_first_block
+```
+
+**Weak keys:**
+```python
+>>> # Null key
+>>> weak_key = b'\x00' * 16
+
+>>> # All same byte
+>>> weak_key = b'A' * 16
+
+>>> # Common passwords
+>>> from hashlib import md5
+>>> weak_key = md5(b'password').digest()
+```
+
+**IV reuse in CBC:**
+```python
+>>> # If same IV used twice:
+>>> # C1[0] ⊕ C2[0] = P1[0] ⊕ P2[0]
+>>> # Can recover XOR of plaintexts
+```
+
+---
+
+## Quick Reference
+
+**Key sizes:**
+- AES-128: 16 bytes
+- AES-192: 24 bytes  
+- AES-256: 32 bytes
+
+**Block size:** Always 16 bytes
+
+**Mode requirements:**
+- ECB: Just key
+- CBC: Key + IV (16 bytes)
+- CTR: Key + nonce (8-16 bytes)
+- GCM: Key + nonce (12 bytes recommended)
+
+**Padding:**
+```python
+from Crypto.Util.Padding import pad, unpad
+padded = pad(data, 16)
+original = unpad(padded, 16)
+```
+
+**Random bytes:**
+```python
+from Crypto.Random import get_random_bytes
+key = get_random_bytes(16)
+iv = get_random_bytes(16)
+```
+
+**Import shortcuts:**
+```python
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad, unpad
+from Crypto.Random import get_random_bytes
+import base64
+```
+
+**Common mistakes:**
+- Forgetting to pad in ECB/CBC
+- Reusing IV in CBC
+- Using ECB mode (reveals patterns)
+- Not storing IV/nonce with ciphertext
+- Wrong key size (must be 16/24/32 bytes)
