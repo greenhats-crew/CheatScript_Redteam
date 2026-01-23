@@ -326,10 +326,34 @@ AES (Advanced Encryption Standard) is a symmetric block cipher.
 - Same key for encryption and decryption
 
 **Common modes:**
-- **ECB** (Electronic Codebook): Each block encrypted independently (insecure, don't use)
-- **CBC** (Cipher Block Chaining): Each block XORed with previous ciphertext, needs IV
-- **CTR** (Counter): Stream cipher mode, needs nonce
-- **GCM** (Galois/Counter Mode): Authenticated encryption, provides integrity
+
+- **ECB** (Electronic Codebook): 
+  - Each block encrypted independently
+  - `C[i] = AES(K, P[i])`
+  - **Problem**: Identical plaintext blocks → identical ciphertext blocks
+  - **Famous example**: Encrypting Tux the penguin image reveals the pattern!
+  - ⚠️ Never use ECB for real encryption
+<img width="600" height="357" alt="image" src="https://github.com/user-attachments/assets/8a99e885-7ea0-4515-bece-b257c2d16bcb" />
+
+- **CBC** (Cipher Block Chaining):
+  - Each block XORed with previous ciphertext before encryption
+  - `C[0] = AES(K, P[0] ⊕ IV)`
+  - `C[i] = AES(K, P[i] ⊕ C[i-1])`
+  - Needs random IV (stored with ciphertext)
+  - Same plaintext → different ciphertext (if IV different)
+
+- **CTR** (Counter):
+  - Encrypts counter values, then XORs with plaintext (stream cipher)
+  - `C[i] = P[i] ⊕ AES(K, nonce || counter)`
+  - No padding needed
+  - Can encrypt/decrypt in parallel
+  - Counter must never repeat with same key
+
+- **GCM** (Galois/Counter Mode):
+  - CTR mode + authentication tag (GMAC)
+  - Provides both confidentiality and integrity
+  - Detects tampering/modification
+  - Most recommended for modern use
 
 **Padding:**
 - AES requires input to be multiple of 16 bytes
@@ -540,12 +564,30 @@ b'HELLO'
 >>> blocks[0] == blocks[1] == blocks[2]
 True  # ECB encrypts identical blocks identically!
 
+>>> # This is why ECB is broken - patterns leak!
+>>> # Example: Encrypting an image with ECB
+>>> # Original: Tux penguin (black & white areas)
+>>> # ECB result: You can still see Tux! (same colors → same cipher blocks)
+>>> # CBC result: Looks like random noise (good!)
+
 >>> # CBC would have different blocks
 >>> cipher = AES.new(key, AES.MODE_CBC, iv=b'\x00'*16)
 >>> ciphertext_cbc = cipher.encrypt(plaintext)
 >>> blocks_cbc = [ciphertext_cbc[i:i+16] for i in range(0, len(ciphertext_cbc), 16)]
 >>> blocks_cbc[0] == blocks_cbc[1]
-False  # CBC produces different ciphertext
+False  # CBC produces different ciphertext for identical plaintext
+```
+
+**Visual explanation (Tux the penguin):**
+```
+Original image: 🐧 (clear penguin shape)
+ECB encrypted:  🐧 (still see penguin outline - INSECURE!)
+CBC encrypted:  📺 (looks like random static - SECURE)
+
+Why? ECB encrypts each 16-byte block the same way:
+- Black pixels (same bytes) → Same ciphertext
+- White pixels (same bytes) → Same ciphertext  
+- Pattern preserved!
 ```
 
 ### Byte-at-a-time ECB decryption (oracle attack)
