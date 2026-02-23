@@ -113,7 +113,7 @@
 - **Operations**:
     - `push rax`: Pushes `rax` value onto stack.
     - `pop rax`: Pops top stack value into `rax`.
-        -The pop instruction is purpose-built for this. pop rdi does two things:
+      - The pop instruction is purpose-built for this. pop rdi does two things:
         1. Reads the value at [rsp] into rdi (just like `mov rdi, [rsp]`).
         2. Adds 8 to rsp, advancing the stack pointer to the next value.
 
