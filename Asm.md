@@ -139,6 +139,19 @@ movsx rax, eax    ; rax = 0xffffffffffffffff  (unsigned: 18446744073709551615 / 
    └▸│ 1234560   │ "Hi"        │       first argument
 ```
 
+```
+Higher addresses ↑ (older values)
+──────────────────────────────────────
+0x...f8     [rsp + 24]   0x12345678    ← quad 1 (oldest)
+0x...f0     [rsp + 16]   0xabcdef12    ← quad 2
+0x...e8     [rsp +  8]   0xdeadbeef    ← quad 3
+0x...e0   ← rsp ──────   0xcafebabe    ← quad 4 (newest / top)
+──────────────────────────────────────
+Lower addresses ↓ (new pushes go here)
+
+Stack grows downward → rsp decreases when pushing
+```
+
 - **Purpose**: Temporary LIFO storage in RAM.
 - **`rsp`** always points to the top of the stack.
 
