@@ -1,4 +1,6 @@
-# CPU Data Storage and Assembly Programming
+# x86_64 Assembly Programming — Complete Reference
+
+---
 
 ## CPU Data Storage Types
 
@@ -12,13 +14,13 @@
 
 ### Byte Groups
 
-| Name              | Size    | Bits |
-| ----------------- | ------- | ---- |
-| Nibble            | ½ byte  | 4    |
-| Byte              | 1 byte  | 8    |
-| Half word / Word  | 2 bytes | 16   |
-| Double word (dword) | 4 bytes | 32 |
-| Quad word (qword) | 8 bytes | 64   |
+| Name               | Size    | Bits |
+| ------------------ | ------- | ---- |
+| Nibble             | ½ byte  | 4    |
+| Byte               | 1 byte  | 8    |
+| Half word / Word   | 2 bytes | 16   |
+| Double word (dword)| 4 bytes | 32   |
+| Quad word (qword)  | 8 bytes | 64   |
 
 ### Signed vs. Unsigned
 
@@ -47,13 +49,13 @@
 
 ### Sub-Registers of `rax`
 
-| Name | Size | Bits |
-|------|------|------|
-| `rax` | Full | 64-bit |
-| `eax` | Lower half | 32-bit |
-| `ax`  | Lower quarter | 16-bit |
-| `al`  | Lowest byte | 8-bit (low) |
-| `ah`  | Second byte  | 8-bit (high) |
+| Name  | Size          | Bits           |
+|-------|---------------|----------------|
+| `rax` | Full          | 64-bit         |
+| `eax` | Lower half    | 32-bit         |
+| `ax`  | Lower quarter | 16-bit         |
+| `al`  | Lowest byte   | 8-bit (low)    |
+| `ah`  | Second byte   | 8-bit (high)   |
 
 Example: `mov al, 255` sets the lowest 8 bits of `rax`.
 
@@ -84,24 +86,24 @@ movsx rax, eax    ; rax = 0xffffffffffffffff  (unsigned: 18446744073709551615 / 
 
 ## Arithmetic Instructions
 
-| Instruction     | Equivalent           | Description                                      | Example |
-| --------------- | -------------------- | ------------------------------------------------ | ------- |
-| `add rax, rbx`  | `rax = rax + rbx`    | Add                                              | `5+3=8` |
-| `sub ebx, ecx`  | `ebx = ebx - ecx`    | Subtract                                         | `10-4=6` |
-| `imul rsi, rdi` | `rsi = rsi * rdi`    | Signed multiply (truncates to 64-bit)            | `6*7=42` |
-| `div reg`       | `rax = rdx:rax / reg`<br>`rdx = rdx:rax % reg` | Unsigned divide — quotient in `rax`, remainder in `rdx` | `10/3 → rax=3, rdx=1` |
-| `inc rdx`       | `rdx++`              | Increment by 1                                   | `9→10` |
-| `dec rdx`       | `rdx--`              | Decrement by 1                                   | `5→4` |
-| `neg rax`       | `rax = 0 - rax`      | Negate                                           | `5→-5` |
-| `not rax`       | `rax = ~rax`         | Bitwise NOT (flip all bits)                      | `0b1010→0b0101` |
-| `and rax, rbx`  | `rax &= rbx`         | Bitwise AND                                      | `0b1100 & 0b1010 = 0b1000` |
-| `or rax, rbx`   | `rax \|= rbx`        | Bitwise OR                                       | `0b1100 \| 0b1010 = 0b1110` |
-| `xor rcx, rdx`  | `rcx ^= rdx`         | Bitwise XOR                                      | `0b1100 ^ 0b1010 = 0b0110` |
-| `shl rax, 10`   | `rax <<= 10`         | Shift left, fill right with 0s                   | `0b1 → 0b10000000000` |
-| `shr rax, 10`   | `rax >>= 10`         | Shift right, fill left with 0s                   | `0b10000000000 → 0b1` |
-| `sar rax, 10`   | `rax >>= 10` (signed) | Arithmetic right shift — preserves sign bit     | `0b1111000000000000 → 0b1111111111111111` |
-| `ror rax, 10`   | rotate right         | Rotate bits right by 10                          | — |
-| `rol rax, 10`   | rotate left          | Rotate bits left by 10                           | — |
+| Instruction      | Equivalent              | Description                                        | Example |
+| ---------------- | ----------------------- | -------------------------------------------------- | ------- |
+| `add rax, rbx`   | `rax = rax + rbx`       | Add                                                | `5+3=8` |
+| `sub ebx, ecx`   | `ebx = ebx - ecx`       | Subtract                                           | `10-4=6` |
+| `imul rsi, rdi`  | `rsi = rsi * rdi`       | Signed multiply (truncates to 64-bit)              | `6*7=42` |
+| `div reg`        | `rax = rdx:rax / reg`<br>`rdx = rdx:rax % reg` | Unsigned divide — quotient in `rax`, remainder in `rdx` | `10/3 → rax=3, rdx=1` |
+| `inc rdx`        | `rdx++`                 | Increment by 1                                     | `9→10` |
+| `dec rdx`        | `rdx--`                 | Decrement by 1                                     | `5→4` |
+| `neg rax`        | `rax = 0 - rax`         | Negate                                             | `5→-5` |
+| `not rax`        | `rax = ~rax`            | Bitwise NOT (flip all bits)                        | `0b1010→0b0101` |
+| `and rax, rbx`   | `rax &= rbx`            | Bitwise AND                                        | `0b1100 & 0b1010 = 0b1000` |
+| `or rax, rbx`    | `rax \|= rbx`           | Bitwise OR                                         | `0b1100 \| 0b1010 = 0b1110` |
+| `xor rcx, rdx`   | `rcx ^= rdx`            | Bitwise XOR                                        | `0b1100 ^ 0b1010 = 0b0110` |
+| `shl rax, 10`    | `rax <<= 10`            | Shift left, fill right with 0s                     | `0b1 → 0b10000000000` |
+| `shr rax, 10`    | `rax >>= 10`            | Shift right, fill left with 0s                     | `0b10000000000 → 0b1` |
+| `sar rax, 10`    | `rax >>= 10` (signed)   | Arithmetic right shift — preserves sign bit        | `0b1111000000000000 → 0b1111111111111111` |
+| `ror rax, 10`    | rotate right            | Rotate bits right by 10                            | — |
+| `rol rax, 10`    | rotate left             | Rotate bits left by 10                             | — |
 
 > **`div` special case**: If `rdx ≠ 0` before dividing, the dividend is the full 128-bit value `rdx:rax`, which can produce a wildly unexpected quotient. Always `xor rdx, rdx` (zero out `rdx`) before a simple division.
 
@@ -264,11 +266,11 @@ _start:
 
 ### `.asciz` vs `.ascii` vs `.string`
 
-| Directive  | Null-terminated? | Use when...                     |
-| ---------- | ---------------- | ------------------------------- |
-| `.asciz`   | ✅ Yes           | General null-terminated strings |
-| `.string`  | ✅ Yes           | Same as `.asciz`                |
-| `.ascii`   | ❌ No            | You control the terminator manually |
+| Directive  | Null-terminated? | Use when...                          |
+| ---------- | ---------------- | ------------------------------------ |
+| `.asciz`   | ✅ Yes           | General null-terminated strings      |
+| `.string`  | ✅ Yes           | Same as `.asciz`                     |
+| `.ascii`   | ❌ No            | You control the terminator manually  |
 
 ### Compared to the Byte-by-Byte Approach
 
@@ -336,10 +338,10 @@ _start:
 
 ### `.bss` vs `.data`
 
-| Section | Purpose | Initialised? |
-|---------|---------|-------------|
-| `.data` | Defined constants, strings | ✅ Yes — values baked into binary |
-| `.bss`  | Buffers, scratch space | ❌ No — zeroed at runtime, no size in binary |
+| Section | Purpose                        | Initialised? |
+|---------|--------------------------------|-------------|
+| `.data` | Defined constants, strings     | ✅ Yes — values baked into binary |
+| `.bss`  | Buffers, scratch space         | ❌ No — zeroed at runtime, no size in binary |
 
 > Use `.bss` for buffers you'll write into at runtime. It saves space in the binary since the OS zeroes it for you.
 
@@ -361,12 +363,12 @@ STAY_LEET:
 
 Arithmetic and comparison instructions set these flags:
 
-| Flag | Name | Set when... |
-|------|------|-------------|
-| `CF` | Carry Flag | Unsigned overflow (result exceeded 64 bits) |
-| `ZF` | Zero Flag | Result is exactly 0 |
-| `OF` | Overflow Flag | Signed overflow (positive↔negative wrap) |
-| `SF` | Sign Flag | Result's MSB is 1 (i.e., negative) |
+| Flag | Name          | Set when...                                            |
+|------|---------------|--------------------------------------------------------|
+| `CF` | Carry Flag    | Unsigned overflow (result exceeded 64 bits)            |
+| `ZF` | Zero Flag     | Result is exactly 0                                    |
+| `OF` | Overflow Flag | Signed overflow (positive↔negative wrap)               |
+| `SF` | Sign Flag     | Result's MSB is 1 (i.e., negative)                    |
 
 ### `cmp` and `test`
 
@@ -386,24 +388,30 @@ jnz NON_ZERO
 jz  IS_ZERO
 ```
 
+View eflags in GDB:
+```
+(gdb) info registers eflags
+eflags         0x283               [ CF SF IF ]
+```
+
 ### Conditional Jump Table
 
-| Instruction | Meaning | Flag Condition |
-|-------------|---------|----------------|
-| `je` / `jz`   | Equal / Zero          | ZF = 1 |
-| `jne` / `jnz` | Not equal / Not zero  | ZF = 0 |
-| `jg`          | Greater (signed)      | ZF=0 and SF=OF |
-| `jl`          | Less (signed)         | SF ≠ OF |
-| `jge`         | Greater or equal (signed) | SF=OF |
-| `jle`         | Less or equal (signed)    | ZF=1 or SF≠OF |
-| `ja`          | Above (unsigned)      | CF=0 and ZF=0 |
-| `jb`          | Below (unsigned)      | CF=1 |
-| `jae`         | Above or equal (unsigned) | CF=0 |
-| `jbe`         | Below or equal (unsigned) | CF=1 or ZF=1 |
-| `js`          | Negative              | SF=1 |
-| `jns`         | Non-negative          | SF=0 |
-| `jo`          | Overflow              | OF=1 |
-| `jno`         | No overflow           | OF=0 |
+| Instruction      | Meaning                        | Flag Condition         |
+|------------------|--------------------------------|------------------------|
+| `je` / `jz`      | Equal / Zero                   | ZF = 1                 |
+| `jne` / `jnz`    | Not equal / Not zero           | ZF = 0                 |
+| `jg`             | Greater (signed)               | ZF=0 and SF=OF         |
+| `jl`             | Less (signed)                  | SF ≠ OF                |
+| `jge`            | Greater or equal (signed)      | SF=OF                  |
+| `jle`            | Less or equal (signed)         | ZF=1 or SF≠OF          |
+| `ja`             | Above (unsigned)               | CF=0 and ZF=0          |
+| `jb`             | Below (unsigned)               | CF=1                   |
+| `jae`            | Above or equal (unsigned)      | CF=0                   |
+| `jbe`            | Below or equal (unsigned)      | CF=1 or ZF=1           |
+| `js`             | Negative                       | SF=1                   |
+| `jns`            | Non-negative                   | SF=0                   |
+| `jo`             | Overflow                       | OF=1                   |
+| `jno`            | No overflow                    | OF=0                   |
 
 ### Loop with Conditional Jump
 
@@ -417,6 +425,19 @@ LOOP_HEADER:
 ; rax = 10 here
 ```
 
+### Jump Tables (Switch Pattern)
+
+A **jump table** is an array of addresses stored in memory, one per case. Instead of chaining comparisons, the program uses the input value as an index into the table, loads the address at that position, and jumps to it.
+
+```asm
+; Example: use first byte of argv[1] as index into jump table
+mov rcx, QWORD PTR [rsp+0x10]  ; argv[1]
+xor eax, eax
+mov al, BYTE PTR [rcx]          ; load first character
+mov rax, QWORD PTR [rax*8+0x401085]  ; look up address in jump table
+jmp rax                         ; jump to it
+```
+
 ---
 
 ## `call` and `ret`
@@ -426,11 +447,11 @@ LOOP_HEADER:
 
 ### Calling Conventions
 
-| Architecture | Argument Registers | Return | Extra args |
-|---|---|---|---|
-| x86 (32-bit) | Pushed on stack (reverse order) | `eax` | — |
-| amd64 (64-bit) | `rdi`, `rsi`, `rdx`, `rcx`, `r8`, `r9` | `rax` | Rest on stack |
-| ARM | `r0`–`r3` | `r0` | — |
+| Architecture   | Argument Registers                       | Return | Extra args    |
+|----------------|------------------------------------------|--------|---------------|
+| x86 (32-bit)   | Pushed on stack (reverse order)          | `eax`  | —             |
+| amd64 (64-bit) | `rdi`, `rsi`, `rdx`, `rcx`, `r8`, `r9`  | `rax`  | Rest on stack |
+| ARM            | `r0`–`r3`                                | `r0`   | —             |
 
 ```asm
 ; Caller
@@ -447,11 +468,11 @@ add_numbers:
 
 ### Register Save Responsibilities (amd64)
 
-| Type | Registers | Who saves? |
-|------|-----------|-----------|
-| Callee-saved | `rbx`, `rbp`, `r12`–`r15` | Callee must push/pop |
-| Caller-saved | `rax`, `rdi`–`r11` | Caller must save before `call` if needed |
-| Special | `rsp` | Both — must always be valid |
+| Type          | Registers            | Who saves?                        |
+|---------------|----------------------|-----------------------------------|
+| Callee-saved  | `rbx`, `rbp`, `r12`–`r15` | Callee must push/pop         |
+| Caller-saved  | `rax`, `rdi`–`r11`   | Caller must save before `call` if needed |
+| Special       | `rsp`                | Both — must always be valid       |
 
 ```asm
 callee:
@@ -488,19 +509,15 @@ syscall
 
 ### Common Syscalls (Linux x86_64)
 
-| Syscall | Purpose | Return |
-|---------|---------|--------|
-| `read(fd, buf, count)` | Read bytes from fd | Bytes read |
-| `write(fd, buf, count)` | Write bytes to fd | Bytes written |
-| `open(path, flags)` | Open a file | File descriptor |
-| `fork()` | Create child process | 0 (child) / PID (parent) |
-| `execve(filename, argv, envp)` | Replace process image | No return on success |
-| `wait(status)` | Wait for child to exit | Child PID |
-| `exit(code)` | Terminate process | — |
-
-### String Arguments via `.data` (preferred)
-
-See the **Data Section** chapter above. No more byte-by-byte stack writes.
+| Syscall                          | Purpose                     | Return                  |
+|----------------------------------|-----------------------------|-------------------------|
+| `read(fd, buf, count)`           | Read bytes from fd          | Bytes read              |
+| `write(fd, buf, count)`          | Write bytes to fd           | Bytes written           |
+| `open(path, flags)`              | Open a file                 | File descriptor         |
+| `fork()`                         | Create child process        | 0 (child) / PID (parent)|
+| `execve(filename, argv, envp)`   | Replace process image       | No return on success    |
+| `wait(status)`                   | Wait for child to exit      | Child PID               |
+| `exit(code)`                     | Terminate process           | —                       |
 
 ---
 
@@ -529,25 +546,122 @@ echo $?              # prints exit code
 
 # Disassemble
 objdump -M intel -d program
+objdump -s -d -M intel /tmp/your-program
 
 # Dump only .text section
 objcopy --dump-section=.text=program.text program
+
+# Dump .rodata (useful for finding hardcoded strings/passwords)
+objdump -s -j .rodata /challenge/reverse-me
+
+# List all printable strings in binary
+strings /challenge/reverse-me
+
+# Trace all syscalls at runtime
+strace ./program
 ```
 
-### Debugging
+---
+
+## Debugging with GDB
+
+### Setup
+
+```bash
+gdb /path/to/binary
+```
+
+### Essential Commands
+
+| Command                        | Description                                       |
+|--------------------------------|---------------------------------------------------|
+| `starti`                       | Start program, stop at very first instruction     |
+| `si` / `stepi`                 | Step one instruction                              |
+| `ni <n>`                       | Step over next N instructions                     |
+| `continue`                     | Continue execution until next breakpoint          |
+| `quit`                         | Exit GDB                                          |
+| `disassemble`                  | Dump assembler code for current function          |
+| `print $rdi`                   | Print value of register                           |
+| `x $rsp`                       | Print value at address                            |
+| `x/<type>`                     | Print with type format (e.g. `x/16gx $rsp`)      |
+| `info registers eflags`        | View CPU flags                                    |
+| `display/8i $rip`              | Always display next 8 instructions at prompt     |
+| `display/16gx $rsp`            | Always display 16 qwords from stack at prompt    |
+| `break *(main+<offset>)`       | Set breakpoint by offset                          |
+| `break <address>`              | Set breakpoint by address                         |
+
+### Triggering a Breakpoint in Code
+
+Use `int3` to embed a software breakpoint directly in your assembly:
 
 ```asm
-mov rdi, 42
-mov rax, 60
-int3                 ; software breakpoint — triggers the debugger
-syscall
+.intel_syntax noprefix
+.global _start
+_start:
+    mov rdi, 1337
+    int3                 ; triggers the debugger here
+    mov rax, 60
+    syscall
 ```
 
-| Tool | Purpose |
-|------|---------|
-| `gdb <file>` + `starti` | Step through from the very first instruction |
-| `strace ./program` | Trace all syscalls made at runtime |
-| `rappel` | REPL for testing individual assembly instructions |
+### GDB Scripting
+
+```bash
+gdb -x script.gdb ./program       # run commands from file
+gdb -ex 'starti' -ex 'si' ./prog  # run individual commands
+```
+
+Put permanent settings in `~/.gdbinit`:
+```
+set disassembly-flavor intel
+```
+
+---
+
+## Reverse Engineering — Reading Disassembly
+
+### Example: Simple Password Check (Sequential `cmp`)
+
+```asm
+; The binary compares argv[1] byte-by-byte against a hardcoded string
+401000:  mov    rax, QWORD PTR [rsp+0x10]   ; rax = argv[1]
+401005:  cmp    BYTE PTR [rax], 0x74        ; compare [0] vs 't'
+401008:  jne    40107e <fail>
+40100a:  cmp    BYTE PTR [rax+0x1], 0x6f   ; compare [1] vs 'o'
+40100e:  jne    40107e <fail>
+401010:  cmp    BYTE PTR [rax+0x2], 0x76   ; compare [2] vs 'v'
+; ... and so on
+```
+
+To reverse: convert each hex value to its ASCII character to recover the password.
+
+### Example: Loop-Based String Comparison
+
+```asm
+loop:
+    mov    al, BYTE PTR [rsi]       ; load next password character
+    cmp    al, BYTE PTR [rdi]       ; compare against argv[1] character
+    jne    fail                     ; mismatch → fail
+    cmp    al, 0x0                  ; null terminator?
+    je     success                  ; matched all → success
+    inc    rdi                      ; advance argv[1] pointer
+    inc    rsi                      ; advance password pointer
+    jmp    loop
+```
+
+### Finding Passwords — Three Approaches
+
+1. **GDB**: `stepi` to the comparison instruction, then `x` the registers.
+2. **strings**: `strings /challenge/binary` — lists all printable strings embedded in the binary.
+3. **objdump .rodata**: `objdump -s -j .rodata /challenge/binary` — dumps the read-only data section directly.
+
+```bash
+$ objdump -s -j .rodata /challenge/reverse-me
+Contents of section .rodata:
+ 402000 6539524a 425200                      e9RJBR.
+$ /challenge/reverse-me e9RJBR
+pwn.college{...}
+```
 
 ---
 
@@ -571,7 +685,7 @@ Repeat an instruction `n` times at assemble time:
 
 ### Stack Frame
 
-A stack frame is the region of stack memory a function uses for its local variables and saved registers.
+A stack frame is the region of stack memory a function uses for local variables and saved registers.
 
 - `rbp` marks a fixed base; `rsp` moves downward to allocate space.
 - Local variables live **below** `rbp` (e.g., `[rbp - 8]`).
@@ -587,4 +701,35 @@ mov [rbp - 0xc], eax   ; list[2]
 
 mov rsp, rbp
 ret
+```
+
+### `setz` — Set Byte on Zero Flag
+
+```asm
+cmp BYTE PTR [rsp], 42
+setz dil               ; dil = 1 if equal, 0 otherwise
+mov rax, 60
+syscall                ; exit with dil as code
+```
+
+---
+
+## Quick Reference Card
+
+```
+REGISTERS:   rax rbx rcx rdx rsi rdi rsp rbp rip r8–r15
+SUB-REG:     rax → eax → ax → al/ah
+
+ARITHMETIC:  add sub imul div inc dec neg not and or xor shl shr sar ror rol
+MEMORY:      mov [addr], reg   |   mov reg, [addr]   |   lea reg, [expr]
+STACK:       push reg  →  sub rsp,8 + mov [rsp],reg
+             pop reg   →  mov reg,[rsp] + add rsp,8
+
+SYSCALL:     rax=number, rdi=arg1, rsi=arg2, rdx=arg3 → syscall
+FLOW:        jmp label | je jne jg jl jge jle ja jb ... | call label | ret
+FLAGS:       ZF (zero) CF (carry) SF (sign) OF (overflow)
+
+BUILD:       as -o prog.o prog.s && ld -o prog prog.o
+DEBUG:       gdb prog → starti → si / display/8i $rip
+INSPECT:     objdump -M intel -d prog | strings prog | strace prog
 ```
