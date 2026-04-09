@@ -1,4 +1,4 @@
-# Cryptography Knowledge Summary — Pwn.college
+# Cryptography Knowledge Summary
 ### Part 1: XOR · OTP · AES-ECB
 
 ---
