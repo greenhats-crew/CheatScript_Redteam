@@ -412,9 +412,9 @@ align_pad = 16 - 9 = 7   (push flag[24] to end of Block 1)
 
 Layout after alignment:
 ┌───── Block 0 ─────┐┌──────── Block 1 ────────┐┌────── Block 2 ──────┐
-│ flag[0:16]         ││ flag[16:25] + 0x00 * 7   ││ candidate + 0x00*15  │
-└────────────────────┘└──────────────────────────┘└─────────────────────┘
-         ↑ fixed                   ↑ flag[24] here           ↑ reference
+│ flag[0:16]        ││ flag[16:25] + 0x00 * 7  ││ candidate + 0x00*15 │
+└───────────────────┘└─────────────────────────┘└─────────────────────┘
+     ↑ fixed               ↑ flag[24] here           ↑ reference
 
 When candidate == flag[24]:  Block 1 ciphertext == Block 2 ciphertext ✓
 ```
